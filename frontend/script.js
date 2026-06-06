@@ -29,27 +29,76 @@ let breathingTick = 0; // 0 to 15 seconds box cycle
 // Global storage for download
 window.currentAdvicePlan = null;
 
-// Student Motivational Quotes
-const MOTIVATIONAL_QUOTES = [
-    "This exam is just a single chapter in your life, not the whole book. Keep going!",
-    "Your value is not measured in marks. Breathe, do your best, and let go of the rest.",
-    "Competitive exams are tests of your preparation, not of your capability or your future.",
-    "Success is the sum of small efforts, repeated day in and day out.",
-    "You have conquered difficult days before. You can and will get through this.",
-    "One mock test score cannot determine your potential. It's simply a tool to help you grow.",
-    "Trust your hard work. You are much stronger and more resilient than you think.",
-    "Breathe. You don't have to figure out everything today. Just take the next small step.",
-    "No matter the results, you will find a path to succeed. Believe in your journey.",
-    "Rest is a part of your preparation, not a distraction. Give yourself permission to pause."
+// Anime Quotes Database
+const CHARACTER_QUOTES = [
+    {
+        name: "Naruto Uzumaki",
+        anime: "Naruto",
+        avatar: "assets/naruto.png",
+        quote: "If you don't like your destiny, don't accept it. Instead, have the courage to change it the way you want it to be!"
+    },
+    {
+        name: "Naruto Uzumaki",
+        anime: "Naruto",
+        avatar: "assets/naruto.png",
+        quote: "Failing doesn't give you a reason to give up, as long as you believe."
+    },
+    {
+        name: "Monkey D. Luffy",
+        anime: "One Piece",
+        avatar: "assets/luffy.png",
+        quote: "If you don't take risks, you can't create a future!"
+    },
+    {
+        name: "Monkey D. Luffy",
+        anime: "One Piece",
+        avatar: "assets/luffy.png",
+        quote: "No matter how hard or how impossible it is, never lose sight of your goal!"
+    },
+    {
+        name: "Son Goku",
+        anime: "Dragon Ball",
+        avatar: "assets/goku.png",
+        quote: "Power comes in response to a need, not a desire. You have to create that need!"
+    },
+    {
+        name: "Son Goku",
+        anime: "Dragon Ball",
+        avatar: "assets/goku.png",
+        quote: "Limit-break! Every obstacle is just a chance to push past your previous self."
+    },
+    {
+        name: "Izuku Midoriya (Deku)",
+        anime: "My Hero Academia",
+        avatar: "assets/deku.png",
+        quote: "Sometimes I do feel like a failure... but even so, I'll keep going!"
+    },
+    {
+        name: "Izuku Midoriya (Deku)",
+        anime: "My Hero Academia",
+        avatar: "assets/deku.png",
+        quote: "A hero is someone who overcomes every obstacle and keeps moving forward, no matter what!"
+    }
 ];
 
 // Event Listeners
 document.addEventListener('DOMContentLoaded', () => {
-    // Select a random quote
+    // Select a random anime character & quote
+    const randomItem = CHARACTER_QUOTES[Math.floor(Math.random() * CHARACTER_QUOTES.length)];
+    
     const quoteEl = document.getElementById('motivationQuote');
-    if (quoteEl) {
-        const randomQuote = MOTIVATIONAL_QUOTES[Math.floor(Math.random() * MOTIVATIONAL_QUOTES.length)];
-        quoteEl.textContent = randomQuote;
+    const authorEl = document.getElementById('quoteAuthor');
+    const avatarEl = document.getElementById('characterAvatar');
+    const bgCharEl = document.getElementById('floatingCharacter');
+    
+    if (quoteEl) quoteEl.textContent = randomItem.quote;
+    if (authorEl) authorEl.textContent = `- ${randomItem.name} (${randomItem.anime})`;
+    if (avatarEl) {
+        avatarEl.src = randomItem.avatar;
+        avatarEl.alt = randomItem.name;
+    }
+    if (bgCharEl) {
+        bgCharEl.style.backgroundImage = `url('${randomItem.avatar}')`;
     }
 
     wellbeingForm.addEventListener('submit', handleFormSubmit);
@@ -235,6 +284,24 @@ function showError(msg) {
 
 function resetForm() {
     wellbeingForm.reset();
+    
+    // Choose a new random anime quote & character on start over
+    const randomItem = CHARACTER_QUOTES[Math.floor(Math.random() * CHARACTER_QUOTES.length)];
+    const quoteEl = document.getElementById('motivationQuote');
+    const authorEl = document.getElementById('quoteAuthor');
+    const avatarEl = document.getElementById('characterAvatar');
+    const bgCharEl = document.getElementById('floatingCharacter');
+    
+    if (quoteEl) quoteEl.textContent = randomItem.quote;
+    if (authorEl) authorEl.textContent = `- ${randomItem.name} (${randomItem.anime})`;
+    if (avatarEl) {
+        avatarEl.src = randomItem.avatar;
+        avatarEl.alt = randomItem.name;
+    }
+    if (bgCharEl) {
+        bgCharEl.style.backgroundImage = `url('${randomItem.avatar}')`;
+    }
+
     formSection.classList.remove('hidden');
     loadingSpinner.classList.add('hidden');
     resultsSection.classList.add('hidden');

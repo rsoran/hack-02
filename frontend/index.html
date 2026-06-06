@@ -20,8 +20,13 @@
         <main class="main-content">
             <!-- Motivation Banner -->
             <div class="motivation-banner" id="motivationBanner">
-                <span class="quote-icon">✨</span>
-                <p id="motivationQuote">Breathe. You are doing your best, and that is enough.</p>
+                <div class="character-avatar-container">
+                    <img id="characterAvatar" src="assets/naruto.png" alt="Naruto" class="character-avatar">
+                </div>
+                <div class="quote-content">
+                    <p id="motivationQuote">Breathe. You are doing your best, and that is enough.</p>
+                    <span id="quoteAuthor" class="quote-author">- Naruto Uzumaki</span>
+                </div>
             </div>
 
             <!-- Form Section -->
@@ -261,6 +266,7 @@
         </footer>
     </div>
 
+    <div id="floatingCharacter" class="floating-character"></div>
     <script src="script.js"></script>
 </body>
 </html>

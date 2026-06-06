@@ -2,9 +2,13 @@ import os
 import sys
 from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS
+from dotenv import load_dotenv
 
 # Add current api folder to path for absolute imports inside Vercel
 sys.path.append(os.path.dirname(__file__))
+
+# Load environment variables from .env
+load_dotenv(os.path.join(os.path.dirname(__file__), '..', '.env'))
 
 from config import config
 from wellbeing_advisor import WellbeingAdvisor

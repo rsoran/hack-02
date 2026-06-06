@@ -104,12 +104,12 @@ body::after {
     right: 40px;
     width: 250px;
     height: 380px;
-    z-index: -1;
+    z-index: 1;
     pointer-events: none;
     background-size: contain;
     background-repeat: no-repeat;
     background-position: bottom right;
-    opacity: 0.85;
+    opacity: 0.9;
     animation: float-character 8s infinite alternate ease-in-out;
     filter: drop-shadow(0 15px 30px rgba(99, 102, 241, 0.15));
     transition: background-image 0.8s ease-in-out;
@@ -1019,5 +1019,20 @@ body::after {
 .wellbeing-card:hover {
     transform: translateY(-3px) scale(1.005);
     border-color: rgba(99, 102, 241, 0.25);
+}
+
+/* Constrain cards layout on large desktop viewports to prevent character overlapping */
+@media (min-width: 1200px) {
+    .container {
+        max-width: 1200px;
+        padding-right: 280px;
+    }
+    .floating-character {
+        width: 280px;
+        height: 420px;
+        right: 40px;
+        bottom: 30px;
+        opacity: 0.95;
+    }
 }
 

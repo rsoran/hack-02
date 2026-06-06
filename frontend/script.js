@@ -83,18 +83,60 @@ const CHARACTER_QUOTES = [
         anime: "My Hero Academia",
         avatar: "assets/deku.png",
         quote: "A hero is someone who overcomes every obstacle and keeps moving forward, no matter what!"
+    },
+    {
+        name: "Tanjiro Kamado",
+        anime: "Demon Slayer",
+        avatar: "assets/tanjiro.png",
+        quote: "No matter how many people you may lose, you have no choice but to go on living. No matter how devastating the blows may be."
+    },
+    {
+        name: "Tanjiro Kamado",
+        anime: "Demon Slayer",
+        avatar: "assets/tanjiro.png",
+        quote: "I can do it. I know I can do it. I'm the guy who gets it done, broken bones or not! I will keep moving!"
+    },
+    {
+        name: "Nezuko Kamado",
+        anime: "Demon Slayer",
+        avatar: "assets/nezuko.png",
+        quote: "Breathe in, stay strong. Protecting those we love gives us the power to overcome any challenge!"
+    },
+    {
+        name: "Zenitsu Agatsuma",
+        anime: "Demon Slayer",
+        avatar: "assets/zenitsu.png",
+        quote: "If you can only do one thing, hone it to perfection! Hone it to the utmost limit!"
+    },
+    {
+        name: "Zenitsu Agatsuma",
+        anime: "Demon Slayer",
+        avatar: "assets/zenitsu.png",
+        quote: "Don't give up! Even if it's painful, even if it's tough, don't try to take the easy way out!"
     }
 ];
 
-// Event Listeners
-document.addEventListener('DOMContentLoaded', () => {
-    // Select a random anime character & quote
+const DEMON_SLAYER_CHARACTERS = [
+    { name: "Tanjiro Kamado", avatar: "assets/tanjiro.png" },
+    { name: "Nezuko Kamado", avatar: "assets/nezuko.png" },
+    { name: "Zenitsu Agatsuma", avatar: "assets/zenitsu.png" }
+];
+
+const SHONEN_CHARACTERS = [
+    { name: "Naruto Uzumaki", avatar: "assets/naruto.png" },
+    { name: "Monkey D. Luffy", avatar: "assets/luffy.png" },
+    { name: "Son Goku", avatar: "assets/goku.png" },
+    { name: "Izuku Midoriya (Deku)", avatar: "assets/deku.png" }
+];
+
+function selectRandomCharacters() {
     const randomItem = CHARACTER_QUOTES[Math.floor(Math.random() * CHARACTER_QUOTES.length)];
     
     const quoteEl = document.getElementById('motivationQuote');
     const authorEl = document.getElementById('quoteAuthor');
     const avatarEl = document.getElementById('characterAvatar');
     const bgCharEl = document.getElementById('floatingCharacter');
+    const bgCharLeftEl = document.getElementById('floatingCharacterLeft');
     
     if (quoteEl) quoteEl.textContent = randomItem.quote;
     if (authorEl) authorEl.textContent = `- ${randomItem.name} (${randomItem.anime})`;
@@ -102,9 +144,42 @@ document.addEventListener('DOMContentLoaded', () => {
         avatarEl.src = randomItem.avatar;
         avatarEl.alt = randomItem.name;
     }
+    
+    // Choose Left Character (Demon Slayer) avoiding duplication with banner
+    const leftChoices = DEMON_SLAYER_CHARACTERS.filter(c => c.name !== randomItem.name);
+    const leftChar = leftChoices[Math.floor(Math.random() * leftChoices.length)];
+    
+    // Choose Right Character (Shonen) avoiding duplication with banner
+    const rightChoices = SHONEN_CHARACTERS.filter(c => c.name !== randomItem.name);
+    const rightChar = rightChoices[Math.floor(Math.random() * rightChoices.length)];
+    
     if (bgCharEl) {
-        bgCharEl.style.backgroundImage = `url('${randomItem.avatar}')`;
+        bgCharEl.style.backgroundImage = `url('${rightChar.avatar}')`;
     }
+    if (bgCharLeftEl) {
+        bgCharLeftEl.style.backgroundImage = `url('${leftChar.avatar}')`;
+    }
+}
+
+// Event Listeners
+document.addEventListener('DOMContentLoaded', () => {
+    // Select random anime characters for banner, left float, and right float
+    selectRandomCharacters();
+
+    // Load self-care checklist states
+    const habitChecks = document.querySelectorAll('.habit-check');
+    habitChecks.forEach(check => {
+        const savedState = localStorage.getItem(`habit_${check.id}`);
+        if (savedState !== null) {
+            check.checked = savedState === 'true';
+        }
+        check.addEventListener('change', () => {
+            localStorage.setItem(`habit_${check.id}`, check.checked);
+        });
+    });
+
+    // Render mood history log
+    renderHistory();
 
     wellbeingForm.addEventListener('submit', handleFormSubmit);
     btnBreathe.addEventListener('click', toggleBreathing);
@@ -171,6 +246,9 @@ async function handleFormSubmit(e) {
         displayAdvicePlan(advicePlan);
         updateStressGauge(mood);
         showResults();
+
+        // Save check-in to history
+        saveCheckin(mood, exam);
     } catch (error) {
         console.error('Error fetching wellness plan:', error);
         showError('Could not retrieve your wellbeing plan right now. Please try again.');
@@ -432,22 +510,8 @@ function showError(msg) {
 function resetForm() {
     wellbeingForm.reset();
     
-    // Choose a new random anime quote & character on start over
-    const randomItem = CHARACTER_QUOTES[Math.floor(Math.random() * CHARACTER_QUOTES.length)];
-    const quoteEl = document.getElementById('motivationQuote');
-    const authorEl = document.getElementById('quoteAuthor');
-    const avatarEl = document.getElementById('characterAvatar');
-    const bgCharEl = document.getElementById('floatingCharacter');
-    
-    if (quoteEl) quoteEl.textContent = randomItem.quote;
-    if (authorEl) authorEl.textContent = `- ${randomItem.name} (${randomItem.anime})`;
-    if (avatarEl) {
-        avatarEl.src = randomItem.avatar;
-        avatarEl.alt = randomItem.name;
-    }
-    if (bgCharEl) {
-        bgCharEl.style.backgroundImage = `url('${randomItem.avatar}')`;
-    }
+    // Choose a new random anime quote & characters on start over
+    selectRandomCharacters();
 
     formSection.classList.remove('hidden');
     loadingSpinner.classList.add('hidden');
@@ -491,3 +555,106 @@ function downloadAdvice() {
     link.download = `mindease-wellness-plan-${new Date().toISOString().split('T')[0]}.txt`;
     link.click();
 }
+
+/**
+ * Save wellbeing check-in to localStorage history log
+ */
+function saveCheckin(mood, exam) {
+    const timestamp = new Date().toLocaleString();
+    const history = JSON.parse(localStorage.getItem('mindease_history') || '[]');
+    
+    // Add new check-in to the front of history
+    history.unshift({ mood, exam, timestamp });
+    
+    // Cap history at 10 items
+    if (history.length > 10) {
+        history.pop();
+    }
+    
+    localStorage.setItem('mindease_history', JSON.stringify(history));
+    renderHistory();
+}
+
+/**
+ * Render historical check-ins to UI
+ */
+function renderHistory() {
+    const historyLogList = document.getElementById('historyLogList');
+    if (!historyLogList) return;
+    
+    const history = JSON.parse(localStorage.getItem('mindease_history') || '[]');
+    
+    if (history.length === 0) {
+        historyLogList.innerHTML = `
+            <div class="history-empty">No check-ins logged yet. Complete the form above to log your first check-in!</div>
+        `;
+        return;
+    }
+    
+    historyLogList.innerHTML = '';
+    history.forEach(item => {
+        const card = document.createElement('div');
+        card.className = 'history-item-card';
+        
+        let emoji = '🧘';
+        let moodClass = 'mood-calm';
+        
+        if (item.mood.includes('Confident')) {
+            emoji = '🚀';
+            moodClass = 'mood-confident';
+        } else if (item.mood.includes('Anxious')) {
+            emoji = '😰';
+            moodClass = 'mood-anxious';
+        } else if (item.mood.includes('Calm')) {
+            emoji = '🧘';
+            moodClass = 'mood-calm';
+        } else if (item.mood.includes('Exhausted') || item.mood.includes('Burned Out')) {
+            emoji = '🔋';
+            moodClass = 'mood-exhausted';
+        } else if (item.mood.includes('Sad') || item.mood.includes('Doubt')) {
+            emoji = '🥺';
+            moodClass = 'mood-doubt';
+        }
+        
+        card.innerHTML = `
+            <div class="history-item-header">
+                <span class="history-item-mood ${moodClass}">${emoji} ${escapeHTML(item.mood)}</span>
+                <span class="history-item-time">${escapeHTML(item.timestamp)}</span>
+            </div>
+            <div class="history-item-body">
+                <span class="history-item-label">Exam:</span>
+                <span class="history-item-value">${escapeHTML(item.exam)}</span>
+            </div>
+        `;
+        historyLogList.appendChild(card);
+    });
+}
+
+/**
+ * Clear all history entries
+ */
+function clearHistory() {
+    if (confirm('Are you sure you want to clear all your saved check-in history?')) {
+        localStorage.removeItem('mindease_history');
+        renderHistory();
+    }
+}
+
+/**
+ * Escape string utility for safe rendering
+ */
+function escapeHTML(str) {
+    if (!str) return '';
+    return str.replace(/[&<>'"]/g, 
+        tag => ({
+            '&': '&amp;',
+            '<': '&lt;',
+            '>': '&gt;',
+            "'": '&#39;',
+            '"': '&quot;'
+        }[tag] || tag)
+    );
+}
+
+// Expose clearHistory globally so HTML button onclick attribute works
+window.clearHistory = clearHistory;

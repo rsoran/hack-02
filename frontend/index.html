@@ -275,6 +275,18 @@
                     </label>
                 </div>
             </div>
+
+            <!-- Mood & Wellbeing History Log -->
+            <div class="tool-panel history-panel">
+                <div class="history-header">
+                    <h3>📜 Wellbeing History Log</h3>
+                    <button type="button" id="btnClearHistory" class="btn-clear-history" onclick="clearHistory()">Clear All</button>
+                </div>
+                <p>Track your emotional journey over time.</p>
+                <div id="historyLogList" class="history-log-list">
+                    <div class="history-empty">No check-ins logged yet. Complete the form above to log your first check-in!</div>
+                </div>
+            </div>
         </section>
 
         <!-- Footer -->
@@ -284,6 +296,7 @@
     </div>
 
     <div id="floatingCharacter" class="floating-character"></div>
+    <div id="floatingCharacterLeft" class="floating-character-left"></div>
     <script src="script.js"></script>
 </body>
 </html>

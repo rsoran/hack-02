@@ -100,19 +100,19 @@ body::after {
 /* Floating transparent anime character background component */
 .floating-character {
     position: fixed;
-    bottom: 20px;
-    right: 40px;
-    width: 250px;
-    height: 380px;
+    bottom: 15px;
+    right: 15px;
+    width: 130px;
+    height: 200px;
     z-index: 1;
     pointer-events: none;
     background-size: contain;
     background-repeat: no-repeat;
     background-position: bottom right;
-    opacity: 0.9;
+    opacity: 0.12;
     animation: float-character 8s infinite alternate ease-in-out;
     filter: drop-shadow(0 15px 30px rgba(99, 102, 241, 0.15));
-    transition: background-image 0.8s ease-in-out;
+    transition: all 0.8s ease-in-out;
 }
 
 @keyframes float-character {
@@ -872,12 +872,17 @@ body::after {
 
 /* Responsive Styles */
 @media (max-width: 900px) {
-    .floating-character {
-        opacity: 0.2;
-        width: 150px;
-        height: 230px;
-        right: 15px;
+    .floating-character, .floating-character-left {
+        opacity: 0.12;
+        width: 130px;
+        height: 200px;
         bottom: 15px;
+    }
+    .floating-character {
+        right: 15px;
+    }
+    .floating-character-left {
+        left: 15px;
     }
 }
 
@@ -1028,11 +1033,221 @@ body::after {
         padding-right: 280px;
     }
     .floating-character {
+        display: block;
         width: 280px;
         height: 420px;
         right: 40px;
         bottom: 30px;
         opacity: 0.95;
     }
+    .floating-character-left {
+        display: block;
+        width: 130px;
+        height: 200px;
+        left: 15px;
+        bottom: 15px;
+        opacity: 0.12;
+    }
+}
+
+@media (min-width: 1400px) {
+    .container {
+        max-width: 1550px;
+        padding-left: 280px;
+        padding-right: 280px;
+    }
+    .floating-character-left {
+        display: block;
+        width: 280px;
+        height: 420px;
+        left: 40px;
+        bottom: 30px;
+        opacity: 0.95;
+    }
+}
+
+/* Floating Character Left Default Definition */
+.floating-character-left {
+    display: block;
+    position: fixed;
+    bottom: 15px;
+    left: 15px;
+    width: 130px;
+    height: 200px;
+    z-index: 1;
+    pointer-events: none;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: bottom left;
+    opacity: 0.12;
+    animation: float-character-left 8s infinite alternate ease-in-out;
+    filter: drop-shadow(0 15px 30px rgba(99, 102, 241, 0.15));
+    transition: all 0.8s ease-in-out;
+}
+
+@keyframes float-character-left {
+    0% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-12px) rotate(-2deg); }
+    100% { transform: translateY(0) rotate(0deg); }
+}
+
+/* Wellbeing History Log Styles */
+.history-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.btn-clear-history {
+    background: transparent;
+    border: 1px solid rgba(244, 63, 94, 0.35);
+    color: var(--accent-rose-dark);
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all var(--transition-speed) ease;
+}
+
+.btn-clear-history:hover {
+    background: var(--accent-rose-dark);
+    color: white;
+    border-color: var(--accent-rose-dark);
+    transform: translateY(-1px);
+}
+
+.history-log-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    max-height: 280px;
+    overflow-y: auto;
+    padding-right: 4px;
+}
+
+/* Custom scrollbar for history list */
+.history-log-list::-webkit-scrollbar {
+    width: 6px;
+}
+.history-log-list::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.02);
+    border-radius: 3px;
+}
+.history-log-list::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.1);
+    border-radius: 3px;
+}
+.history-log-list::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 0, 0, 0.2);
+}
+
+.history-item-card {
+    background: rgba(255, 255, 255, 0.55);
+    border: 1px solid rgba(255, 255, 255, 0.7);
+    border-radius: 12px;
+    padding: 12px 16px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.01);
+    transition: all var(--transition-speed) ease;
+    animation: historyEntrance 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes historyEntrance {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.history-item-card:hover {
+    transform: translateY(-2px);
+    background: white;
+    box-shadow: 0 6px 15px rgba(99, 102, 241, 0.06);
+    border-color: rgba(99, 102, 241, 0.15);
+}
+
+.history-item-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 6px;
+}
+
+.history-item-mood {
+    font-size: 0.8rem;
+    font-weight: 750;
+    padding: 3px 8px;
+    border-radius: 8px;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.history-item-time {
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    font-weight: 600;
+}
+
+.history-item-body {
+    font-size: 0.82rem;
+    color: var(--text-main);
+    display: flex;
+    gap: 6px;
+}
+
+.history-item-label {
+    font-weight: 600;
+    color: var(--text-muted);
+}
+
+.history-item-value {
+    font-weight: 700;
+    color: var(--accent-indigo-dark);
+}
+
+/* Mood Badge colors */
+.mood-confident {
+    background: rgba(16, 185, 129, 0.08);
+    color: var(--accent-emerald-dark);
+    border: 1px solid rgba(16, 185, 129, 0.15);
+}
+
+.mood-anxious {
+    background: rgba(245, 158, 11, 0.08);
+    color: var(--accent-amber-dark);
+    border: 1px solid rgba(245, 158, 11, 0.15);
+}
+
+.mood-calm {
+    background: rgba(8, 145, 178, 0.08);
+    color: var(--accent-cyan-dark);
+    border: 1px solid rgba(8, 145, 178, 0.15);
+}
+
+.mood-exhausted {
+    background: rgba(239, 68, 68, 0.08);
+    color: var(--accent-rose-dark);
+    border: 1px solid rgba(239, 68, 68, 0.15);
+}
+
+.mood-doubt {
+    background: rgba(244, 63, 94, 0.08);
+    color: var(--accent-rose-dark);
+    border: 1px solid rgba(244, 63, 94, 0.15);
+}
+
+.history-empty {
+    text-align: center;
+    padding: 25px 10px;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    font-style: italic;
+    line-height: 1.4;
 }
 

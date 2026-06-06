@@ -97,6 +97,14 @@ class TestAPI(unittest.TestCase):
         response = self.app.get('/')
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.data.decode('utf-8'), "Mock index")
+
+    @patch('index.send_from_directory')
+    def test_serve_static_index_error(self, mock_send):
+        mock_send.side_effect = Exception("File read error")
+        response = self.app.get('/')
+        self.assertEqual(response.status_code, 404)
+        data = json.loads(response.data.decode('utf-8'))
+        self.assertIn('error', data)
         
     @patch('index.send_from_directory')
     def test_serve_static_assets_caching(self, mock_send):

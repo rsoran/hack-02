@@ -132,5 +132,18 @@ class TestWellbeingAdvisor(unittest.TestCase):
         result = self.advisor.translate_wellbeing({"empathy_statement": "Hello"})
         self.assertIn("परीक्षा की तैयारी", result["empathy_statement"])
 
+    def test_analyze_wellbeing_no_model(self):
+        with patch.dict(os.environ, {}, clear=True):
+            advisor = WellbeingAdvisor()
+            result = advisor.analyze_wellbeing("Anxious", "JEE", ["Pressure"], ["Music"], "Journal")
+            self.assertIn("JEE", result["empathy_statement"])
+            self.assertIn("Pressure", result["empathy_statement"])
+
+    def test_translate_wellbeing_no_model(self):
+        with patch.dict(os.environ, {}, clear=True):
+            advisor = WellbeingAdvisor()
+            result = advisor.translate_wellbeing({"empathy_statement": "Hello"})
+            self.assertIn("परीक्षा की तैयारी", result["empathy_statement"])
+
 if __name__ == '__main__':
     unittest.main()

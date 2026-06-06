@@ -100,3 +100,43 @@ Provide ONLY the raw JSON response, no markdown blocks, no extra text, and ensur
                 "Plan a study block that ends with a guilt-free break to enjoy your hobby."
             ]
         }
+
+    def translate_wellbeing(self, plan_json):
+        """
+        Translate the dynamically generated wellbeing plan into comforting Hindi using Gemini.
+        """
+        prompt = f"""You are a helpful and compassionate translator. Please translate the following JSON wellbeing plan into natural, warm, comforting, and highly grammatically correct Hindi (Devanagari script).
+
+For technical or examination terms (like syllabus backlog, mock test scores, peer pressure, box breathing, Pomodoro technique), please provide standard, intuitive translations or common Devanagari transliteration of these English words (e.g. 'मॉक टेस्ट स्कोर', 'सिलेबस बैकलाग') so it is natural for an Indian student. Do not translate the keys of the JSON, only translate the text values.
+
+JSON to translate:
+{json.dumps(plan_json, ensure_ascii=False)}
+
+Provide ONLY the raw translated JSON response, no markdown blocks, no extra text, and ensure it is valid, parseable JSON. Do not put markdown codes (like ```json) in the response.
+"""
+        try:
+            if self.model:
+                response = self.model.generate_content(prompt)
+                return self._parse_response(response.text, "", "", [], [])
+            else:
+                return self._generate_fallback_translation(plan_json)
+        except Exception as e:
+            print(f"Error calling Gemini API for translation: {e}")
+            return self._generate_fallback_translation(plan_json)
+
+    def _generate_fallback_translation(self, plan):
+        """Standard fallback Hindi response if the AI translator fails"""
+        return {
+            "empathy_statement": "परीक्षा की तैयारी एक कठिन यात्रा है, और तनाव महसूस करना पूरी तरह से स्वाभाविक है। आप अभी एक भारी बोझ उठा रहे हैं, और अभिभूत महसूस करना बिल्कुल ठीक है।",
+            "insights": "तनाव कमजोरी का संकेत नहीं है; यह एक संकेत है कि आप अपने भविष्य की परवाह करते हैं। परीक्षा के माहौल में, दबाव आत्म-संदेह पैदा कर सकता है।",
+            "coping_strategies": [
+                "5-मिनट का नियम अपनाएं: यदि आप अभिभूत महसूस करते हैं, तो केवल 5 मिनट के लिए अध्ययन करें। अक्सर काम शुरू करने के बाद प्रतिरोध कम हो जाता है।",
+                "आत्म-मूल्य को प्रदर्शन से अलग करें: मॉक टेस्ट के अंक प्रतिक्रिया हैं, अंतिम निर्णय नहीं। अंतराल का विश्लेषण करने के लिए उनका उपयोग करें।"
+            ],
+            "hobby_integration": "अध्ययन के बीच में अपनी पसंद की गतिविधियों को शामिल करना समय की बर्बादी नहीं है, बल्कि मस्तिष्क की रिकवरी के लिए महत्वपूर्ण है।",
+            "custom_affirmation": "मैं अपने परीक्षा अंकों से कहीं बढ़कर हूँ। मेरी योग्यता स्थिर है, और मेरा प्रयास ही मेरी प्रगति है।",
+            "suggested_actions": [
+                "अभी 5 मिनट के लिए बॉक्स ब्रीदिंग (गहरी सांस लेने का व्यायाम) करें।",
+                "एक अध्ययन ब्लॉक की योजना बनाएं जो आपकी पसंद की गतिविधि के साथ समाप्त हो।"
+            ]
+        }

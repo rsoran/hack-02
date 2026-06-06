@@ -90,7 +90,7 @@ def analyze_wellbeing():
     }
     """
     try:
-        data = request.get_json()
+        data = request.get_json(silent=True)
         if not data or 'mood' not in data or 'exam' not in data:
             return jsonify({'error': 'Missing required fields: mood, exam'}), 400
             
@@ -105,6 +105,23 @@ def analyze_wellbeing():
     except Exception as e:
         print(f"Exception in analyze_wellbeing: {e}")
         return jsonify({'error': 'Internal server error during analysis'}), 500
+
+@app.route('/api/translate-wellbeing', methods=['POST'])
+def translate_wellbeing():
+    """
+    Translate wellbeing plan to Hindi.
+    Expects the JSON plan as payload.
+    """
+    try:
+        data = request.get_json(silent=True)
+        if not data:
+            return jsonify({'error': 'Missing plan data to translate'}), 400
+        
+        result = advisor.translate_wellbeing(data)
+        return jsonify(result), 200
+    except Exception as e:
+        print(f"Exception in translate_wellbeing: {e}")
+        return jsonify({'error': 'Internal server error during translation'}), 500
 
 @app.route('/api/wellbeing-example', methods=['GET'])
 def get_wellbeing_example():

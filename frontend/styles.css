@@ -134,13 +134,30 @@ body::after {
 }
 
 .header h1 {
-    font-size: 3rem;
-    font-weight: 800;
-    background: linear-gradient(135deg, var(--accent-emerald) 0%, var(--accent-indigo) 50%, var(--accent-cyan) 100%);
+    font-size: 3.2rem;
+    font-weight: 850;
+    letter-spacing: -1.5px;
+    margin-bottom: 15px;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.text-solid {
+    color: #0f172a;
+}
+
+.text-gradient-purple {
+    background: linear-gradient(135deg, #4f46e5 0%, #a855f7 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    margin-bottom: 12px;
-    letter-spacing: -1px;
+}
+
+.text-gradient-orange {
+    background: linear-gradient(135deg, #ec4899 0%, #f97316 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
 }
 
 .header p {
@@ -914,3 +931,93 @@ body::after {
         width: 100%;
     }
 }
+
+/* Stress & Resilience Gauge Styles */
+.gauge-card {
+    background: rgba(255, 255, 255, 0.7);
+    border: 1px solid rgba(255, 255, 255, 0.8);
+    border-radius: 16px;
+    padding: 24px;
+    margin-bottom: 24px;
+    box-shadow: var(--card-shadow);
+}
+
+.gauge-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 14px;
+}
+
+.gauge-header h3 {
+    margin-bottom: 0 !important;
+}
+
+.gauge-value {
+    font-size: 0.9rem;
+    font-weight: 800;
+    padding: 6px 14px;
+    border-radius: 20px;
+    background: rgba(0, 0, 0, 0.05);
+    color: var(--text-main);
+    transition: all 0.5s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.gauge-bar-container {
+    height: 12px;
+    background: rgba(0, 0, 0, 0.06);
+    border-radius: 6px;
+    overflow: hidden;
+    margin-bottom: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+.gauge-bar {
+    height: 100%;
+    width: 0%;
+    border-radius: 6px;
+    transition: width 1.2s cubic-bezier(0.16, 1, 0.3, 1), background-color 1s ease;
+}
+
+.gauge-labels {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--text-muted);
+}
+
+/* Staggered card entrance slide animations */
+.card-animate {
+    opacity: 0;
+    transform: translateY(24px);
+    animation: cardEntrance 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes cardEntrance {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.card-animate:nth-child(1) { animation-delay: 0.05s; }
+.card-animate:nth-child(2) { animation-delay: 0.12s; }
+.card-animate:nth-child(3) { animation-delay: 0.19s; }
+.card-animate:nth-child(4) { animation-delay: 0.26s; }
+.card-animate:nth-child(5) { animation-delay: 0.33s; }
+.card-animate:nth-child(6) { animation-delay: 0.40s; }
+.card-animate:nth-child(7) { animation-delay: 0.47s; }
+.card-animate:nth-child(8) { animation-delay: 0.54s; }
+
+/* Pulse animation on results loaded */
+.wellbeing-card {
+    transition: transform var(--transition-speed) ease, box-shadow var(--transition-speed) ease, border-color var(--transition-speed) ease;
+}
+.wellbeing-card:hover {
+    transform: translateY(-3px) scale(1.005);
+    border-color: rgba(99, 102, 241, 0.25);
+}
+

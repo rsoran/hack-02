@@ -13,7 +13,7 @@
     <div class="container">
         <!-- Header -->
         <header class="header">
-            <h1>🌱 MindEase</h1>
+            <h1>🌱 <span class="text-solid">MindEase</span> <span class="text-gradient-purple">Wellbeing</span> <span class="text-gradient-orange">Companion</span></h1>
             <p>Your mental well-being companion during JEE, NEET, Board Exams & competitive tests</p>
         </header>
 
@@ -165,42 +165,59 @@
             <section id="resultsSection" class="results-section hidden">
                 <h2>Your Wellbeing Action Plan</h2>
                 
+                <!-- Stress Level & Resilience Gauge -->
+                <div class="wellbeing-card gauge-card card-animate">
+                    <div class="gauge-header">
+                        <h3>📊 Stress Level & Mental Resilience</h3>
+                        <span id="gaugeValue" class="gauge-value">Moderate</span>
+                    </div>
+                    <div class="gauge-bar-container">
+                        <div id="gaugeBar" class="gauge-bar" style="width: 50%;"></div>
+                    </div>
+                    <div class="gauge-labels">
+                        <span>Resilience (High)</span>
+                        <span>Balanced</span>
+                        <span>Stress (High)</span>
+                    </div>
+                </div>
+
                 <!-- Empathy Statement -->
-                <div class="wellbeing-card empathy-card">
+                <div class="wellbeing-card empathy-card card-animate">
                     <p id="empathyText"></p>
                 </div>
 
                 <!-- Insights Block -->
-                <div class="wellbeing-card insights-card">
+                <div class="wellbeing-card insights-card card-animate">
                     <h3>🔍 Insight on your Stress</h3>
                     <p id="insightsText"></p>
                 </div>
 
                 <!-- Coping Strategies -->
-                <div class="wellbeing-card coping-card">
+                <div class="wellbeing-card coping-card card-animate">
                     <h3>💡 Actionable Coping Strategies</h3>
                     <ul id="copingList" class="coping-list"></ul>
                 </div>
 
                 <!-- Hobby Integration -->
-                <div class="wellbeing-card hobby-card">
+                <div class="wellbeing-card hobby-card card-animate">
                     <h3>🎨 Healthy Study Break Idea</h3>
                     <p id="hobbyText"></p>
                 </div>
 
                 <!-- Affirmation Block -->
-                <div class="affirmation-block">
+                <div class="affirmation-block card-animate">
                     <p id="affirmationText"></p>
                 </div>
 
                 <!-- Suggested Actions Checklist -->
-                <div class="wellbeing-card checklist-card">
+                <div class="wellbeing-card checklist-card card-animate">
                     <h3>📋 Recommended Next Actions</h3>
                     <div id="actionList" class="action-grid"></div>
                 </div>
 
                 <!-- Action Buttons -->
-                <div class="action-buttons">
+                <div class="action-buttons card-animate">
+                    <button type="button" id="btnTranslate" class="btn-secondary" onclick="toggleLanguage()">🌐 Translate to Hindi (हिंदी)</button>
                     <button type="button" class="btn-secondary" onclick="downloadAdvice()">⬇️ Save Plan</button>
                     <button type="button" class="btn-secondary" onclick="resetForm()">↻ Start Over</button>
                 </div>

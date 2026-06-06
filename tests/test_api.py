@@ -107,5 +107,30 @@ class TestAPI(unittest.TestCase):
         self.assertIn('Cache-Control', response.headers)
         self.assertEqual(response.headers['Cache-Control'], 'public, max-age=31536000, immutable')
 
+    @patch('index.advisor')
+    def test_translate_wellbeing_success(self, mock_advisor):
+        mock_advisor.translate_wellbeing.return_value = {
+            "empathy_statement": "Mock empathy in Hindi"
+        }
+        
+        payload = {"empathy_statement": "Mock empathy"}
+        response = self.app.post(
+            '/api/translate-wellbeing',
+            data=json.dumps(payload),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, 200)
+        data = json.loads(response.data.decode('utf-8'))
+        self.assertEqual(data['empathy_statement'], 'Mock empathy in Hindi')
+        mock_advisor.translate_wellbeing.assert_called_once_with(payload)
+
+    def test_translate_wellbeing_missing_payload(self):
+        response = self.app.post(
+            '/api/translate-wellbeing',
+            data=None,
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, 400)
+
 if __name__ == '__main__':
     unittest.main()

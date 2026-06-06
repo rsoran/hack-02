@@ -26,7 +26,12 @@ const breathingText = document.getElementById('breathingText');
 let breathingInterval = null;
 let breathingTick = 0; // 0 to 15 seconds box cycle
 
-// Global storage for download
+// Global storage for translation and download
+let currentEnglishPlan = null;
+let currentHindiPlan = null;
+let currentLanguage = 'en'; // 'en' or 'hi'
+let isTranslating = false;
+
 window.currentAdvicePlan = null;
 
 // Anime Quotes Database
@@ -146,11 +151,25 @@ async function handleFormSubmit(e) {
 
         const advicePlan = await response.json();
         
+        // Cache the English plan
+        currentEnglishPlan = advicePlan;
+        currentHindiPlan = null;
+        currentLanguage = 'en';
+        
+        const btnTrans = document.getElementById('btnTranslate');
+        if (btnTrans) {
+            btnTrans.textContent = "🌐 Translate to Hindi (हिंदी)";
+        }
+        
         // Cache for download
         window.currentAdvicePlan = advicePlan;
 
+        // Reset display card animations
+        triggerCardAnimations();
+
         // Populate and display results
         displayAdvicePlan(advicePlan);
+        updateStressGauge(mood);
         showResults();
     } catch (error) {
         console.error('Error fetching wellness plan:', error);
@@ -166,7 +185,18 @@ function displayAdvicePlan(plan) {
     empathyText.textContent = plan.empathy_statement || '';
 
     // 2. Insights
-    insightsText.textContent = plan.insights || '';
+    insightsText.innerHTML = '';
+    const insights = plan.insights || '';
+    if (Array.isArray(insights)) {
+        insights.forEach(insight => {
+            const p = document.createElement('p');
+            p.style.marginBottom = '10px';
+            p.textContent = insight;
+            insightsText.appendChild(p);
+        });
+    } else {
+        insightsText.textContent = insights;
+    }
 
     // 3. Coping Strategies
     copingList.innerHTML = '';
@@ -191,6 +221,123 @@ function displayAdvicePlan(plan) {
         itemDiv.className = 'action-item';
         itemDiv.textContent = action;
         actionList.appendChild(itemDiv);
+    });
+}
+
+/**
+ * Toggle language of the displayed plan between English and Hindi
+ */
+async function toggleLanguage() {
+    if (isTranslating || !currentEnglishPlan) return;
+    
+    const btnTrans = document.getElementById('btnTranslate');
+    
+    if (currentLanguage === 'en') {
+        // Switch to Hindi
+        if (!currentHindiPlan) {
+            isTranslating = true;
+            if (btnTrans) btnTrans.textContent = "⌛ Translating... कृपया प्रतीक्षा करें...";
+            
+            try {
+                currentHindiPlan = await translatePlanOnServer(currentEnglishPlan);
+            } catch (err) {
+                console.error("Translation failed:", err);
+                alert("Translation failed. Please try again in a moment.");
+                if (btnTrans) btnTrans.textContent = "🌐 Translate to Hindi (हिंदी)";
+                isTranslating = false;
+                return;
+            }
+            isTranslating = false;
+        }
+        
+        // Display Hindi
+        displayAdvicePlan(currentHindiPlan);
+        currentLanguage = 'hi';
+        window.currentAdvicePlan = currentHindiPlan;
+        if (btnTrans) btnTrans.textContent = "🌐 View in English (अंग्रेजी)";
+    } else {
+        // Switch to English
+        displayAdvicePlan(currentEnglishPlan);
+        currentLanguage = 'en';
+        window.currentAdvicePlan = currentEnglishPlan;
+        if (btnTrans) btnTrans.textContent = "🌐 Translate to Hindi (हिंदी)";
+    }
+    
+    // Trigger animations when toggle occurs
+    triggerCardAnimations();
+}
+
+/**
+ * Send English plan to server for Gemini-powered Hindi translation
+ */
+async function translatePlanOnServer(plan) {
+    const response = await fetch(`${API_BASE_URL}/api/translate-wellbeing`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(plan)
+    });
+    
+    if (!response.ok) {
+        throw new Error("Failed to translate layout");
+    }
+    
+    return await response.json();
+}
+
+/**
+ * Update the visual Stress Level and Resilience Gauge
+ */
+function updateStressGauge(mood) {
+    const gaugeBar = document.getElementById('gaugeBar');
+    const gaugeValue = document.getElementById('gaugeValue');
+    if (!gaugeBar || !gaugeValue) return;
+
+    let width = '50%';
+    let text = 'Moderate Stress';
+    let color = '#d97706'; // Dark amber
+
+    if (mood === 'Happy & Confident') {
+        width = '20%';
+        text = 'Low Stress / Stable';
+        color = '#065f46'; // Dark green
+    } else if (mood === 'Neutral & Calm') {
+        width = '40%';
+        text = 'Balanced / Stable';
+        color = '#0e7490'; // Dark cyan
+    } else if (mood === 'Anxious & Stressed') {
+        width = '75%';
+        text = 'High Stress';
+        color = '#b45309'; // Warm amber
+    } else if (mood === 'Sad & Doubting Myself') {
+        width = '80%';
+        text = 'High Self-Doubt / Low Resilience';
+        color = '#be123c'; // Dark rose
+    } else if (mood === 'Burned Out & Exhausted') {
+        width = '95%';
+        text = 'Extreme Burnout / Exhaustion';
+        color = '#b91c1c'; // Dark red
+    }
+
+    // Apply animation properties
+    gaugeBar.style.width = width;
+    gaugeBar.style.backgroundColor = color;
+    gaugeValue.textContent = text;
+    gaugeValue.style.backgroundColor = color;
+    gaugeValue.style.color = '#ffffff';
+}
+
+/**
+ * Utility to restart css staggered entrance animations
+ */
+function triggerCardAnimations() {
+    const cards = document.querySelectorAll('.card-animate');
+    cards.forEach(card => {
+        // Strip element and add back animation class to force browser to repaint keyframes
+        card.style.animation = 'none';
+        card.offsetHeight; /* Trigger reflow */
+        card.style.animation = '';
     });
 }
 

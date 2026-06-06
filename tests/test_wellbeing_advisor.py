@@ -103,5 +103,34 @@ class TestWellbeingAdvisor(unittest.TestCase):
         self.assertIn("JEE", result["empathy_statement"])
         self.assertIn("Pressure", result["empathy_statement"])
 
+    def test_generate_fallback_translation(self):
+        plan_json = {"empathy_statement": "Hello", "insights": "Stress"}
+        fallback = self.advisor._generate_fallback_translation(plan_json)
+        self.assertIn("empathy_statement", fallback)
+        self.assertIn("तनाव", fallback["insights"])
+        self.assertIn("परीक्षा की तैयारी", fallback["empathy_statement"])
+
+    @patch('wellbeing_advisor.WellbeingAdvisor._parse_response')
+    def test_translate_wellbeing_with_model(self, mock_parse):
+        mock_model = MagicMock()
+        mock_response = MagicMock()
+        mock_response.text = "mocked translated text"
+        mock_model.generate_content.return_value = mock_response
+        self.advisor.model = mock_model
+        
+        mock_parse.return_value = {"empathy_statement": "नमस्ते"}
+        
+        result = self.advisor.translate_wellbeing({"empathy_statement": "Hello"})
+        mock_model.generate_content.assert_called_once()
+        self.assertEqual(result["empathy_statement"], "नमस्ते")
+
+    def test_translate_wellbeing_fallback_on_exception(self):
+        mock_model = MagicMock()
+        mock_model.generate_content.side_effect = Exception("API error")
+        self.advisor.model = mock_model
+        
+        result = self.advisor.translate_wellbeing({"empathy_statement": "Hello"})
+        self.assertIn("परीक्षा की तैयारी", result["empathy_statement"])
+
 if __name__ == '__main__':
     unittest.main()

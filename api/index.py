@@ -21,16 +21,48 @@ app = Flask(__name__, static_folder=static_folder, static_url_path='')
 config_name = os.getenv('FLASK_ENV', 'development')
 app.config.from_object(config.get(config_name, config['default']))
 
-CORS(app)
+# Harden CORS to secure API routes and restrict credentials
+CORS(app, resources={r"/api/*": {"origins": "*"}}, supports_credentials=False)
 
 # Initialize advisor
 advisor = WellbeingAdvisor()
 
+@app.after_request
+def add_security_headers(response):
+    """Add standard security headers and Cache-Control rules to responses"""
+    response.headers['X-Frame-Options'] = 'DENY'
+    response.headers['X-Content-Type-Options'] = 'nosniff'
+    response.headers['Referrer-Policy'] = 'strict-origin-when-cross-origin'
+    
+    # Content Security Policy (CSP) tailored for the styling and font dependencies of the frontend
+    csp_policy = (
+        "default-src 'self'; "
+        "script-src 'self' 'unsafe-inline'; "
+        "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; "
+        "font-src 'self' https://fonts.gstatic.com; "
+        "img-src 'self' data:; "
+        "connect-src 'self';"
+    )
+    response.headers['Content-Security-Policy'] = csp_policy
+    
+    # Apply caching policies based on request path
+    path = request.path
+    if path.startswith('/assets/') or path.endswith(('.png', '.jpg', '.jpeg', '.gif', '.ico', '.svg', '.woff2', '.woff', '.ttf')):
+        response.headers['Cache-Control'] = 'public, max-age=31536000, immutable'
+    elif path.endswith(('.css', '.js')):
+        response.headers['Cache-Control'] = 'public, max-age=86400'
+    elif path == '/' or path == '/index.html':
+        response.headers['Cache-Control'] = 'no-cache, no-store, must-revalidate'
+        
+    return response
+
 @app.route('/', methods=['GET'])
 def index():
-    """Serve index.html"""
+    """Serve index.html with cache-busting headers"""
     try:
-        return send_from_directory(static_folder, 'index.html')
+        response = send_from_directory(static_folder, 'index.html')
+        response.headers['Cache-Control'] = 'no-cache, no-store, must-revalidate'
+        return response
     except Exception as e:
         print(f"Error serving index.html: {e}")
         return jsonify({'error': 'Frontend not found'}), 404
@@ -95,12 +127,22 @@ def get_wellbeing_example():
 
 @app.route('/<path:path>', methods=['GET'])
 def serve_static(path):
-    """Serve static files"""
+    """Serve static files with appropriate cache control rules"""
     try:
-        return send_from_directory(static_folder, path)
+        response = send_from_directory(static_folder, path)
+        # Apply caching policies for asset optimization
+        if path.startswith('assets/') or path.endswith(('.png', '.jpg', '.jpeg', '.gif', '.ico', '.svg', '.woff2', '.woff', '.ttf')):
+            response.headers['Cache-Control'] = 'public, max-age=31536000, immutable'
+        elif path.endswith(('.css', '.js')):
+            response.headers['Cache-Control'] = 'public, max-age=86400' # 1 day for styles/scripts
+        else:
+            response.headers['Cache-Control'] = 'public, max-age=3600'
+        return response
     except Exception:
         try:
-            return send_from_directory(static_folder, 'index.html')
+            response = send_from_directory(static_folder, 'index.html')
+            response.headers['Cache-Control'] = 'no-cache, no-store, must-revalidate'
+            return response
         except Exception:
             return jsonify({'error': 'Endpoint not found'}), 404
 

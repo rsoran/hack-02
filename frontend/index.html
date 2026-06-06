@@ -35,40 +35,40 @@
                 <form id="wellbeingForm">
                     <!-- Mood Selection -->
                     <div class="form-group">
-                        <label>Select your current mood / state:</label>
-                        <div class="mood-grid">
-                            <label class="mood-card-option">
-                                <input type="radio" name="mood" value="Happy & Confident" required>
+                        <label id="moodLabel">Select your current mood / state:</label>
+                        <div class="mood-grid" role="radiogroup" aria-labelledby="moodLabel">
+                            <label class="mood-card-option" for="moodConfident">
+                                <input type="radio" id="moodConfident" name="mood" value="Happy & Confident" required>
                                 <div class="mood-card-content">
-                                    <span class="mood-emoji">🚀</span>
+                                    <span class="mood-emoji" aria-hidden="true">🚀</span>
                                     <span class="mood-label">Confident</span>
                                 </div>
                             </label>
-                            <label class="mood-card-option">
-                                <input type="radio" name="mood" value="Anxious & Stressed">
+                            <label class="mood-card-option" for="moodAnxious">
+                                <input type="radio" id="moodAnxious" name="mood" value="Anxious & Stressed">
                                 <div class="mood-card-content">
-                                    <span class="mood-emoji">😰</span>
+                                    <span class="mood-emoji" aria-hidden="true">😰</span>
                                     <span class="mood-label">Anxious</span>
                                 </div>
                             </label>
-                            <label class="mood-card-option">
-                                <input type="radio" name="mood" value="Neutral & Calm">
+                            <label class="mood-card-option" for="moodCalm">
+                                <input type="radio" id="moodCalm" name="mood" value="Neutral & Calm">
                                 <div class="mood-card-content">
-                                    <span class="mood-emoji">🧘</span>
+                                    <span class="mood-emoji" aria-hidden="true">🧘</span>
                                     <span class="mood-label">Calm</span>
                                 </div>
                             </label>
-                            <label class="mood-card-option">
-                                <input type="radio" name="mood" value="Burned Out & Exhausted">
+                            <label class="mood-card-option" for="moodExhausted">
+                                <input type="radio" id="moodExhausted" name="mood" value="Burned Out & Exhausted">
                                 <div class="mood-card-content">
-                                    <span class="mood-emoji">🔋</span>
+                                    <span class="mood-emoji" aria-hidden="true">🔋</span>
                                     <span class="mood-label">Exhausted</span>
                                 </div>
                             </label>
-                            <label class="mood-card-option">
-                                <input type="radio" name="mood" value="Sad & Doubting Myself">
+                            <label class="mood-card-option" for="moodSelfDoubt">
+                                <input type="radio" id="moodSelfDoubt" name="mood" value="Sad & Doubting Myself">
                                 <div class="mood-card-content">
-                                    <span class="mood-emoji">🥺</span>
+                                    <span class="mood-emoji" aria-hidden="true">🥺</span>
                                     <span class="mood-label">Self-Doubt</span>
                                 </div>
                             </label>
@@ -93,50 +93,50 @@
 
                     <!-- Stress Triggers Grid -->
                     <div class="form-group">
-                        <label>What is causing you stress right now? (Select all that apply)</label>
-                        <div class="triggers-grid">
-                            <label class="checkbox">
-                                <input type="checkbox" name="triggers" value="Syllabus Backlog"> Syllabus Backlog
+                        <label id="triggersLabel">What is causing you stress right now? (Select all that apply)</label>
+                        <div class="triggers-grid" role="group" aria-labelledby="triggersLabel">
+                            <label class="checkbox" for="triggerBacklog">
+                                <input type="checkbox" id="triggerBacklog" name="triggers" value="Syllabus Backlog"> Syllabus Backlog
                             </label>
-                            <label class="checkbox">
-                                <input type="checkbox" name="triggers" value="Mock Test Scores"> Mock Test Scores
+                            <label class="checkbox" for="triggerMockScores">
+                                <input type="checkbox" id="triggerMockScores" name="triggers" value="Mock Test Scores"> Mock Test Scores
                             </label>
-                            <label class="checkbox">
-                                <input type="checkbox" name="triggers" value="Peer Pressure & Comparison"> Peer Pressure
+                            <label class="checkbox" for="triggerPeerPressure">
+                                <input type="checkbox" id="triggerPeerPressure" name="triggers" value="Peer Pressure & Comparison"> Peer Pressure
                             </label>
-                            <label class="checkbox">
-                                <input type="checkbox" name="triggers" value="Family Expectations"> Family Expectations
+                            <label class="checkbox" for="triggerFamilyExpectations">
+                                <input type="checkbox" id="triggerFamilyExpectations" name="triggers" value="Family Expectations"> Family Expectations
                             </label>
-                            <label class="checkbox">
-                                <input type="checkbox" name="triggers" value="Fear of Exam Failure"> Fear of Failure
+                            <label class="checkbox" for="triggerFearFailure">
+                                <input type="checkbox" id="triggerFearFailure" name="triggers" value="Fear of Exam Failure"> Fear of Failure
                             </label>
-                            <label class="checkbox">
-                                <input type="checkbox" name="triggers" value="Lack of Sleep & Fatigue"> Lack of Sleep
+                            <label class="checkbox" for="triggerLackSleep">
+                                <input type="checkbox" id="triggerLackSleep" name="triggers" value="Lack of Sleep & Fatigue"> Lack of Sleep
                             </label>
                         </div>
                     </div>
 
                     <!-- Hobbies Selector -->
                     <div class="form-group">
-                        <label>What are your hobbies or activities you enjoy during breaks? (Select all that apply)</label>
-                        <div class="triggers-grid">
-                            <label class="checkbox">
-                                <input type="checkbox" name="hobbies" value="Listening to Music"> Music
+                        <label id="hobbiesLabel">What are your hobbies or activities you enjoy during breaks? (Select all that apply)</label>
+                        <div class="triggers-grid" role="group" aria-labelledby="hobbiesLabel">
+                            <label class="checkbox" for="hobbyMusic">
+                                <input type="checkbox" id="hobbyMusic" name="hobbies" value="Listening to Music"> Music
                             </label>
-                            <label class="checkbox">
-                                <input type="checkbox" name="hobbies" value="Sketching or Painting"> Sketching/Art
+                            <label class="checkbox" for="hobbySketching">
+                                <input type="checkbox" id="hobbySketching" name="hobbies" value="Sketching or Painting"> Sketching/Art
                             </label>
-                            <label class="checkbox">
-                                <input type="checkbox" name="hobbies" value="Playing Outdoor Sports"> Sports/Gym
+                            <label class="checkbox" for="hobbySports">
+                                <input type="checkbox" id="hobbySports" name="hobbies" value="Playing Outdoor Sports"> Sports/Gym
                             </label>
-                            <label class="checkbox">
-                                <input type="checkbox" name="hobbies" value="Playing Games"> Gaming
+                            <label class="checkbox" for="hobbyGaming">
+                                <input type="checkbox" id="hobbyGaming" name="hobbies" value="Playing Games"> Gaming
                             </label>
-                            <label class="checkbox">
-                                <input type="checkbox" name="hobbies" value="Reading Books"> Reading
+                            <label class="checkbox" for="hobbyReading">
+                                <input type="checkbox" id="hobbyReading" name="hobbies" value="Reading Books"> Reading
                             </label>
-                            <label class="checkbox">
-                                <input type="checkbox" name="hobbies" value="Chatting with Friends"> Talking to Friends
+                            <label class="checkbox" for="hobbyChatting">
+                                <input type="checkbox" id="hobbyChatting" name="hobbies" value="Chatting with Friends"> Talking to Friends
                             </label>
                         </div>
                     </div>
@@ -222,7 +222,7 @@
                 <p>Reduce cortisol levels instantly. Follow the breathing circle below.</p>
                 <div class="breathing-container">
                     <div id="breathingCircle" class="breathing-circle">
-                        <span id="breathingText">Ready</span>
+                        <span id="breathingText" aria-live="polite" role="status">Ready</span>
                     </div>
                 </div>
                 <div class="breathing-controls">
@@ -235,25 +235,25 @@
             <div class="tool-panel habits-panel">
                 <h3>💧 Daily Self-Care Goals</h3>
                 <p>Micro-steps to protect your mental sanity during prep.</p>
-                <div class="habits-list">
-                    <label class="habit-item">
-                        <input type="checkbox" class="habit-check">
+                <div class="habits-list" role="group" aria-label="Daily Self-Care Goals">
+                    <label class="habit-item" for="habitWater">
+                        <input type="checkbox" id="habitWater" class="habit-check">
                         <span class="habit-text">Drank 8+ glasses of water today</span>
                     </label>
-                    <label class="habit-item">
-                        <input type="checkbox" class="habit-check">
+                    <label class="habit-item" for="habitStretch">
+                        <input type="checkbox" id="habitStretch" class="habit-check">
                         <span class="habit-text">Took a 10 min screen-free stretch break</span>
                     </label>
-                    <label class="habit-item">
-                        <input type="checkbox" class="habit-check">
+                    <label class="habit-item" for="habitSleep">
+                        <input type="checkbox" id="habitSleep" class="habit-check">
                         <span class="habit-text">Slept 7+ hours last night</span>
                     </label>
-                    <label class="habit-item">
-                        <input type="checkbox" class="habit-check">
+                    <label class="habit-item" for="habitHobby">
+                        <input type="checkbox" id="habitHobby" class="habit-check">
                         <span class="habit-text">Spent 10 min doing a favorite hobby</span>
                     </label>
-                    <label class="habit-item">
-                        <input type="checkbox" class="habit-check">
+                    <label class="habit-item" for="habitBreathe">
+                        <input type="checkbox" id="habitBreathe" class="habit-check">
                         <span class="habit-text">Completed 1 breathing exercise cycle</span>
                     </label>
                 </div>

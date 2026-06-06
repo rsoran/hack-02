@@ -13,17 +13,37 @@
     --accent-amber: #d97706;
     --accent-cyan: #0891b2;
     
+    /* Darker accents to meet WCAG 4.5:1 text contrast standard */
+    --accent-emerald-dark: #065f46;
+    --accent-indigo-dark: #3730a3;
+    --accent-rose-dark: #b91c1c;
+    --accent-amber-dark: #92400e;
+    --accent-cyan-dark: #0e7490;
+    
     --card-bg: rgba(255, 255, 255, 0.5);
     --card-border: rgba(255, 255, 255, 0.7);
     --card-blur: blur(24px);
     
     --text-main: #1e293b;
-    --text-muted: #64748b;
+    --text-muted: #374151; /* Darkened from #64748b to meet 4.5:1 text contrast standard */
     
     --card-shadow: 0 10px 30px rgba(79, 70, 229, 0.05), 0 1px 3px rgba(0, 0, 0, 0.02);
     --card-hover-shadow: 0 20px 40px rgba(79, 70, 229, 0.09), 0 2px 4px rgba(0, 0, 0, 0.03);
     
     --transition-speed: 0.3s;
+}
+
+/* Keyboard users focus outlines for high accessibility */
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+.checkbox:focus-within,
+.mood-card-option:focus-within,
+.habit-item:focus-within {
+    outline: 3px solid var(--accent-indigo);
+    outline-offset: 2px;
+    border-radius: 8px;
 }
 
 body {
@@ -256,7 +276,7 @@ body::after {
 .quote-author {
     font-size: 0.85rem;
     font-weight: 700;
-    color: var(--accent-indigo);
+    color: var(--accent-indigo-dark);
 }
 
 /* Mood Grid Selector */
@@ -324,7 +344,7 @@ body::after {
 }
 
 .mood-card-option input[type="radio"]:checked + .mood-card-content .mood-label {
-    color: var(--accent-indigo);
+    color: var(--accent-indigo-dark);
 }
 
 /* Checkbox Grid (Triggers & Hobbies) */
@@ -379,7 +399,7 @@ body::after {
 .checkbox:has(input[type="checkbox"]:checked) {
     background: rgba(99, 102, 241, 0.05);
     border-color: var(--accent-indigo);
-    color: var(--accent-indigo);
+    color: var(--accent-indigo-dark);
     box-shadow: 0 4px 12px rgba(99, 102, 241, 0.08);
 }
 
@@ -713,13 +733,12 @@ body::after {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
 }
 
-/* Breathing cycles state classes toggled via JS */
 .breathing-circle.inhale {
     transform: scale(1.6);
     background-color: rgba(6, 182, 212, 0.1);
     box-shadow: 0 0 30px rgba(6, 182, 212, 0.25);
     border-color: var(--accent-cyan);
-    color: var(--accent-cyan);
+    color: var(--accent-cyan-dark);
 }
 
 .breathing-circle.hold-inhale {
@@ -727,7 +746,7 @@ body::after {
     background-color: rgba(16, 185, 129, 0.1);
     box-shadow: 0 0 30px rgba(16, 185, 129, 0.25);
     border-color: var(--accent-emerald);
-    color: var(--accent-emerald);
+    color: var(--accent-emerald-dark);
 }
 
 .breathing-circle.exhale {
@@ -735,7 +754,7 @@ body::after {
     background-color: rgba(244, 63, 94, 0.08);
     box-shadow: 0 0 20px rgba(244, 63, 94, 0.2);
     border-color: var(--accent-rose);
-    color: var(--accent-rose);
+    color: var(--accent-rose-dark);
 }
 
 .breathing-circle.hold-exhale {
@@ -743,7 +762,7 @@ body::after {
     background-color: rgba(245, 158, 11, 0.08);
     box-shadow: 0 0 20px rgba(245, 158, 11, 0.2);
     border-color: var(--accent-amber);
-    color: var(--accent-amber);
+    color: var(--accent-amber-dark);
 }
 
 .breathing-controls {

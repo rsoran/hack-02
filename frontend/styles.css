@@ -34,16 +34,41 @@
 }
 
 /* Keyboard users focus outlines for high accessibility */
-button:focus-visible,
-input:focus-visible,
-select:focus-visible,
-textarea:focus-visible,
+button:focus,
+input:focus,
+select:focus,
+textarea:focus,
 .checkbox:focus-within,
 .mood-card-option:focus-within,
 .habit-item:focus-within {
     outline: 3px solid var(--accent-indigo);
     outline-offset: 2px;
     border-radius: 8px;
+}
+
+fieldset {
+    border: none;
+    margin: 0;
+    padding: 0;
+    min-width: 0;
+}
+
+legend {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    padding: 0;
+    margin-bottom: 10px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--text-main);
+    white-space: normal;
+}
+
+/* Custom placeholder contrast styling */
+textarea::placeholder {
+    color: #4b5563;
+    opacity: 1;
 }
 
 body {

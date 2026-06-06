@@ -132,5 +132,73 @@ class TestAPI(unittest.TestCase):
         )
         self.assertEqual(response.status_code, 400)
 
+    @patch('index.send_from_directory')
+    def test_serve_static_css_js_caching(self, mock_send):
+        mock_send.return_value = app.response_class("Mock JS Data", status=200)
+        
+        response = self.app.get('/script.js')
+        self.assertEqual(response.status_code, 200)
+        self.assertIn('Cache-Control', response.headers)
+        self.assertEqual(response.headers['Cache-Control'], 'public, max-age=86400')
+
+    @patch('index.advisor')
+    def test_analyze_wellbeing_internal_error(self, mock_advisor):
+        mock_advisor.analyze_wellbeing.side_effect = Exception("API failure")
+        payload = {
+            "mood": "Stressed",
+            "exam": "NEET"
+        }
+        response = self.app.post(
+            '/api/analyze-wellbeing',
+            data=json.dumps(payload),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, 500)
+        data = json.loads(response.data.decode('utf-8'))
+        self.assertIn('error', data)
+
+    @patch('index.advisor')
+    def test_translate_wellbeing_internal_error(self, mock_advisor):
+        mock_advisor.translate_wellbeing.side_effect = Exception("Translate failure")
+        payload = {"empathy_statement": "Hello"}
+        response = self.app.post(
+            '/api/translate-wellbeing',
+            data=json.dumps(payload),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, 500)
+        data = json.loads(response.data.decode('utf-8'))
+        self.assertIn('error', data)
+
+    def test_serve_static_other_file_direct(self):
+        with app.test_request_context():
+            with patch('index.send_from_directory') as mock_send:
+                mock_send.return_value = app.response_class("Mock Plain Data", status=200)
+                from index import serve_static
+                response = serve_static('readme.md')
+                self.assertEqual(response.status_code, 200)
+                self.assertIn('Cache-Control', response.headers)
+                self.assertEqual(response.headers['Cache-Control'], 'public, max-age=3600')
+
+    def test_serve_static_fallback_index_direct(self):
+        with app.test_request_context():
+            with patch('index.send_from_directory') as mock_send:
+                mock_send.side_effect = [Exception("File not found"), app.response_class("Mock Index Data", status=200)]
+                from index import serve_static
+                response = serve_static('nonexistent-file.html')
+                self.assertEqual(response.status_code, 200)
+                self.assertIn('Cache-Control', response.headers)
+                self.assertEqual(response.headers['Cache-Control'], 'no-cache, no-store, must-revalidate')
+
+    def test_serve_static_complete_failure_direct(self):
+        with app.test_request_context():
+            with patch('index.send_from_directory') as mock_send:
+                mock_send.side_effect = Exception("General error")
+                from index import serve_static
+                res, status_code = serve_static('critical-failure.html')
+                self.assertEqual(status_code, 404)
+                data = json.loads(res.data.decode('utf-8'))
+                self.assertIn('error', data)
+
 if __name__ == '__main__':
     unittest.main()

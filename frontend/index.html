@@ -34,8 +34,8 @@
                 <h2>How are you feeling today?</h2>
                 <form id="wellbeingForm">
                     <!-- Mood Selection -->
-                    <div class="form-group">
-                        <label id="moodLabel">Select your current mood / state:</label>
+                    <fieldset class="form-group">
+                        <legend id="moodLabel">Select your current mood / state:</legend>
                         <div class="mood-grid" role="radiogroup" aria-labelledby="moodLabel">
                             <label class="mood-card-option" for="moodConfident">
                                 <input type="radio" id="moodConfident" name="mood" value="Happy & Confident" required>
@@ -73,7 +73,7 @@
                                 </div>
                             </label>
                         </div>
-                    </div>
+                    </fieldset>
 
                     <!-- Exam Selection -->
                     <div class="form-group">
@@ -92,8 +92,8 @@
                     </div>
 
                     <!-- Stress Triggers Grid -->
-                    <div class="form-group">
-                        <label id="triggersLabel">What is causing you stress right now? (Select all that apply)</label>
+                    <fieldset class="form-group">
+                        <legend id="triggersLabel">What is causing you stress right now? (Select all that apply)</legend>
                         <div class="triggers-grid" role="group" aria-labelledby="triggersLabel">
                             <label class="checkbox" for="triggerBacklog">
                                 <input type="checkbox" id="triggerBacklog" name="triggers" value="Syllabus Backlog"> Syllabus Backlog
@@ -114,11 +114,11 @@
                                 <input type="checkbox" id="triggerLackSleep" name="triggers" value="Lack of Sleep & Fatigue"> Lack of Sleep
                             </label>
                         </div>
-                    </div>
+                    </fieldset>
 
                     <!-- Hobbies Selector -->
-                    <div class="form-group">
-                        <label id="hobbiesLabel">What are your hobbies or activities you enjoy during breaks? (Select all that apply)</label>
+                    <fieldset class="form-group">
+                        <legend id="hobbiesLabel">What are your hobbies or activities you enjoy during breaks? (Select all that apply)</legend>
                         <div class="triggers-grid" role="group" aria-labelledby="hobbiesLabel">
                             <label class="checkbox" for="hobbyMusic">
                                 <input type="checkbox" id="hobbyMusic" name="hobbies" value="Listening to Music"> Music
@@ -139,7 +139,7 @@
                                 <input type="checkbox" id="hobbyChatting" name="hobbies" value="Chatting with Friends"> Talking to Friends
                             </label>
                         </div>
-                    </div>
+                    </fieldset>
 
                     <!-- Journal Reflection -->
                     <div class="form-group">
@@ -249,8 +249,8 @@
             </div>
 
             <!-- Self-Care Habit Tracker -->
-            <div class="tool-panel habits-panel">
-                <h3>💧 Daily Self-Care Goals</h3>
+            <fieldset class="tool-panel habits-panel">
+                <legend class="habits-legend"><h3>💧 Daily Self-Care Goals</h3></legend>
                 <p>Micro-steps to protect your mental sanity during prep.</p>
                 <div class="habits-list" role="group" aria-label="Daily Self-Care Goals">
                     <label class="habit-item" for="habitWater">
@@ -274,7 +274,7 @@
                         <span class="habit-text">Completed 1 breathing exercise cycle</span>
                     </label>
                 </div>
-            </div>
+            </fieldset>
 
             <!-- Mood & Wellbeing History Log -->
             <div class="tool-panel history-panel">

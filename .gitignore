@@ -23,3 +23,8 @@ dist/
 # OS
 .DS_Store
 Thumbs.db
+
+# Testing
+.coverage
+.pytest_cache/
+htmlcov/
